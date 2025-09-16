@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Careers at Youth TV - Join Our Team</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom CSS - Consistent with other pages */
+        .sticky {
+            position: sticky;
+            top: 0;
+        }
+        .z-50 {
+            z-index: 50;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .career-hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                         url('https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        .benefit-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .benefit-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 30px rgba(0,0,0,0.15);
+        }
+        .job-card {
+            transition: all 0.3s ease;
+        }
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .testimonial-card {
+            transition: transform 0.3s ease;
+        }
+        .testimonial-card:hover {
+            transform: scale(1.03);
+        }
+        .process-step {
+            transition: transform 0.3s ease;
+        }
+        .process-step:hover {
+            transform: scale(1.05);
+        }
+        .highlight-box {
+            position: relative;
+            overflow: hidden;
+        }
+        .highlight-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            z-index: 0;
+            transform: rotate(30deg);
+            animation: shine 3s infinite;
+        }
+        @keyframes shine {
+            0% { transform: rotate(30deg) translate(-10%, -10%); }
+            100% { transform: rotate(30deg) translate(90%, 90%); }
+        }
+        .apply-button {
+            transition: all 0.3s ease;
+        }
+        .apply-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        .internship-banner {
+            background: linear-gradient(135deg, #8ea1f0 0%, #9a6bc5 100%);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white shadow-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo and brand -->
+                <div class="flex items-center">
+                    <a href="index.php" class="logo-container mr-3" style="height: 75px;" >
+                        <img src="logo.png" 
+                             alt="Youth TV Logo" 
+                             class="h-full hover:scale-105 transition-transform">
+                    </a>
+                </div>
+    
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex gap-8">
+                    <a href="index.php" class="text-gray-700 hover:text-indigo-600 font-medium relative group">
+                        Home
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-indigo-600 transition-all group-hover:w-full"></span>
+                    </a>
+                    <a href="news.html" class="text-gray-700 hover:text-indigo-600 font-medium relative group">
+                        News
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-indigo-600 transition-all group-hover:w-full"></span>
+                    </a>
+                    <a href="videos.html" class="text-gray-700 hover:text-indigo-600 font-medium relative group">
+                        Videos
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-indigo-600 transition-all group-hover:w-full"></span>
+                    </a>
+                    <a href="podcast.php" class="text-gray-700 hover:text-indigo-600 font-medium relative group">
+                        Podcasts
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-indigo-600 transition-all group-hover:w-full"></span>
+                    </a>
+                    <a href="blog.html" class="text-gray-700 hover:text-indigo-600 font-medium relative group">
+                        Blog
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-indigo-600 transition-all group-hover:w-full"></span>
+                    </a>
+                    <a href="events.php" class="text-gray-700 hover:text-indigo-600 font-medium relative group">
+                        Events
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-indigo-600 transition-all group-hover:w-full"></span>
+                    </a>
+                    <a href="about.html" class="text-gray-700 hover:text-indigo-600 font-medium relative group">
+                        About
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-indigo-600 transition-all group-hover:w-full"></span>
+                    </a>
+                    <a href="careers.html" class="text-indigo-600 font-medium relative group">
+                        Careers
+                        <span class="absolute bottom-0 left-0 w-full h-0.5 bg-indigo-600"></span>
+                    </a>
+                </nav>
+    
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-700 focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+    
+                <!-- Subscribe button -->
+                <div class="hidden md:block">
+                    <a href="#newsletter" class="bg-indigo-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-indigo-700 transition-all shadow-md inline-block">
+                        Subscribe
+                    </a>
+                </div>
+            </div>
+    
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="mobile-menu md:hidden bg-white mt-2 rounded-lg shadow-xl">
+                <div class="px-2 pt-2 pb-4 space-y-2">
+                    <a href="index.php" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100">Home</a>
+                    <a href="news.html" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100">News</a>
+                    <a href="videos.html" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100">Videos</a>
+                    <a href="podcast.php" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100">Podcasts</a>
+                    <a href="blog.html" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100">Blog</a>
+                    <a href="about.html" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100">About</a>
+                    <a href="careers.html" class="block px-3 py-2 rounded-md text-indigo-600 bg-indigo-50">Careers</a>
+                    <a href="#newsletter" class="w-full bg-indigo-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-indigo-700 transition mt-2 text-center block">
+                        Subscribe
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="career-hero text-white py-20">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6">Build Your Career at Youth TV</h1>
+            <p class="text-xl md:text-2xl max-w-3xl mx-auto mb-10">Join our mission to empower the next generation through innovative media and impactful content.</p>
+            <a href="#open-positions" class="bg-indigo-600 text-white px-8 py-4 rounded-full font-semibold hover:bg-indigo-700 transition inline-block apply-button">
+                View Open Positions
+            </a>
+        </div>
+    </section>
+
+    <!-- Internship Banner -->
+    <div class="internship-banner text-white py-4 text-center">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center justify-center">
+            <div class="flex items-center mb-2 md:mb-0">
+                <i class="fas fa-bullhorn text-2xl mr-3"></i>
+                <span class="font-bold text-lg">Internship Applications Now Open!</span>
+            </div>
+            <a href="https://bit.ly/ytv-interns" target="_blank" class="ml-0 md:ml-4 bg-white text-indigo-700 px-4 py-1 rounded-full font-semibold hover:bg-gray-100 transition">
+                Apply Now <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Why Join Us Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4">Why Work at Youth TV?</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">We're building a culture that fosters creativity, growth, and meaningful impact</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Benefit 1 -->
+                <div class="benefit-card bg-white p-8 rounded-xl shadow-lg">
+                    <div class="w-16 h-16 rounded-full bg-indigo-100 flex items-center justify-center mb-6">
+                        <i class="fas fa-bullseye text-indigo-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Purpose-Driven Work</h3>
+                    <p class="text-gray-600">Every role contributes to our mission of empowering youth. See your work make a real difference in young people's lives.</p>
+                </div>
+                
+                <!-- Benefit 2 -->
+                <div class="benefit-card bg-white p-8 rounded-xl shadow-lg">
+                    <div class="w-16 h-16 rounded-full bg-indigo-100 flex items-center justify-center mb-6">
+                        <i class="fas fa-chart-line text-indigo-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Career Growth</h3>
+                    <p class="text-gray-600">We invest in your development with mentorship programs, learning stipends, and opportunities for advancement.</p>
+                </div>
+                
+                <!-- Benefit 3 -->
+                <div class="benefit-card bg-white p-8 rounded-xl shadow-lg">
+                    <div class="w-16 h-16 rounded-full bg-indigo-100 flex items-center justify-center mb-6">
+                        <i class="fas fa-users text-indigo-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Inclusive Culture</h3>
+                    <p class="text-gray-600">Join a diverse team where different perspectives are valued and everyone feels they belong.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Highlight Section -->
+    <section class="py-16 gradient-bg text-white">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl font-bold mb-6">Our Work Environment</h2>
+                    <p class="text-xl mb-6">At Youth TV, we've created a workspace that inspires creativity and collaboration.</p>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <i class="fas fa-check-circle text-2xl text-green-300 mr-4 mt-1"></i>
+                            <div>
+                                <h3 class="text-xl font-bold">Flexible Work Options</h3>
+                                <p class="text-indigo-100">Hybrid schedules and remote opportunities</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-check-circle text-2xl text-green-300 mr-4 mt-1"></i>
+                            <div>
+                                <h3 class="text-xl font-bold">Modern Office Spaces</h3>
+                                <p class="text-indigo-100">Creative hubs designed for collaboration</p>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="rounded-xl overflow-hidden h-64">
+                        <img src="space.jpg" 
+                             alt="Youth TV office" class="w-full h-full object-cover">
+                    </div>
+                    <div class="rounded-xl overflow-hidden h-64">
+                        <img src="office 1.jpg" 
+                             alt="Team meeting" class="w-full h-full object-cover">
+                    </div>
+                    <div class="rounded-xl overflow-hidden h-64">
+                        <img src="office 2.jpg" 
+                             alt="Team collaboration" class="w-full h-full object-cover">
+                    </div>
+                    <div class="rounded-xl overflow-hidden h-64">
+                        <img src="office.jpg" 
+                             alt="Creative workspace" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Job Openings Section -->
+    <!-- Job Openings Section -->
+<section id="open-positions" class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold mb-4">Current Openings</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">Join our team of innovators and change-makers</p>
+        </div>
+
+        <div class="max-w-4xl mx-auto">
+            <!-- Job 1 - General Manager -->
+            <div class="job-card bg-white border border-gray-200 rounded-xl p-6 mb-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+                    <div>
+                        <h3 class="text-xl font-bold">General Manager</h3>
+                        <div class="flex flex-wrap gap-3 mt-2">
+                            <span class="bg-indigo-100 text-indigo-800 text-sm px-3 py-1 rounded-full">Full-time</span>
+                            <span class="bg-yellow-100 text-yellow-800 text-sm px-3 py-1 rounded-full">Hybrid</span>
+                            <span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">Leadership</span>
+                        </div>
+                    </div>
+                    <a href="https://bit.ly/ytv-interns" target="_blank" class="bg-indigo-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-indigo-700 transition mt-4 md:mt-0 inline-block apply-button">
+                        Apply Now
+                    </a>
+                </div>
+                <p class="text-gray-600 mb-4">Lead our organization's strategy and operations to drive growth and impact in youth media.</p>
+                <div class="flex flex-wrap gap-4 text-sm text-gray-500">
+                    <div class="flex items-center">
+                        <i class="fas fa-map-marker-alt mr-2"></i> Accra, Ghana
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-clock mr-2"></i> Available
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-briefcase mr-2"></i> Intern
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Job 2 - Video Editor -->
+            <div class="job-card bg-white border border-gray-200 rounded-xl p-6 mb-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+                    <div>
+                        <h3 class="text-xl font-bold">Video Editor</h3>
+                        <div class="flex flex-wrap gap-3 mt-2">
+                            <span class="bg-indigo-100 text-indigo-800 text-sm px-3 py-1 rounded-full">Full-time</span>
+                            <span class="bg-yellow-100 text-yellow-800 text-sm px-3 py-1 rounded-full">Hybrid</span>
+                            <span class="bg-purple-100 text-purple-800 text-sm px-3 py-1 rounded-full">Production</span>
+                        </div>
+                    </div>
+                    <a href="https://bit.ly/ytv-interns" target="_blank" class="bg-indigo-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-indigo-700 transition mt-4 md:mt-0 inline-block apply-button">
+                        Apply Now
+                    </a>
+                </div>
+                <p class="text-gray-600 mb-4">Create compelling visual stories by editing raw footage into engaging content for our youth audience.</p>
+                <div class="flex flex-wrap gap-4 text-sm text-gray-500">
+                    <div class="flex items-center">
+                        <i class="fas fa-map-marker-alt mr-2"></i> Accra, Ghana
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-clock mr-2"></i> Available
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-briefcase mr-2"></i> Intern
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Job 3 - Videographer -->
+            <div class="job-card bg-white border border-gray-200 rounded-xl p-6 mb-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+                    <div>
+                        <h3 class="text-xl font-bold">Videographer</h3>
+                        <div class="flex flex-wrap gap-3 mt-2">
+                            <span class="bg-indigo-100 text-indigo-800 text-sm px-3 py-1 rounded-full">Full-time</span>
+                            <span class="bg-yellow-100 text-yellow-800 text-sm px-3 py-1 rounded-full">Hybrid</span>
+                            <span class="bg-purple-100 text-purple-800 text-sm px-3 py-1 rounded-full">Production</span>
+                        </div>
+                    </div>
+                    <a href="https://bit.ly/ytv-interns" target="_blank" class="bg-indigo-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-indigo-700 transition mt-4 md:mt-0 inline-block apply-button">
+                        Apply Now
+                    </a>
+                </div>
+                <p class="text-gray-600 mb-4">Capture high-quality video content for our programs, events, and digital platforms.</p>
+                <div class="flex flex-wrap gap-4 text-sm text-gray-500">
+                    <div class="flex items-center">
+                        <i class="fas fa-map-marker-alt mr-2"></i> Accra, Ghana
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-clock mr-2"></i> Available
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-briefcase mr-2"></i> Intern
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Job 4 - Audio/Podcast Producer -->
+            <div class="job-card bg-white border border-gray-200 rounded-xl p-6 mb-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+                    <div>
+                        <h3 class="text-xl font-bold">Audio/Podcast Producer</h3>
+                        <div class="flex flex-wrap gap-3 mt-2">
+                            <span class="bg-indigo-100 text-indigo-800 text-sm px-3 py-1 rounded-full">Full-time</span>
+                            <span class="bg-yellow-100 text-yellow-800 text-sm px-3 py-1 rounded-full">Hybrid</span>
+                            <span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">Production</span>
+                        </div>
+                    </div>
+                    <a href="https://bit.ly/ytv-interns" target="_blank" class="bg-indigo-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-indigo-700 transition mt-4 md:mt-0 inline-block apply-button">
+                        Apply Now
+                    </a>
+                </div>
+                <p class="text-gray-600 mb-4">Produce and edit high-quality audio content for our podcast series and audio platforms.</p>
+                <div class="flex flex-wrap gap-4 text-sm text-gray-500">
+                    <div class="flex items-center">
+                        <i class="fas fa-map-marker-alt mr-2"></i> Accra, Ghana
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-clock mr-2"></i> Available
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-briefcase mr-2"></i> Intern
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Job 5 - On-Air Talent & Interviewing -->
+            <div class="job-card bg-white border border-gray-200 rounded-xl p-6 mb-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+                    <div>
+                        <h3 class="text-xl font-bold">On-Air Talent & Interviewing</h3>
+                        <div class="flex flex-wrap gap-3 mt-2">
+                            <span class="bg-indigo-100 text-indigo-800 text-sm px-3 py-1 rounded-full">Contract</span>
+                            <span class="bg-yellow-100 text-yellow-800 text-sm px-3 py-1 rounded-full">Hybrid</span>
+                            <span class="bg-pink-100 text-pink-800 text-sm px-3 py-1 rounded-full">Talent</span>
+                        </div>
+                    </div>
+                    <a href="https://bit.ly/ytv-interns" target="_blank" class="bg-indigo-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-indigo-700 transition mt-4 md:mt-0 inline-block apply-button">
+                        Apply Now
+                    </a>
+                </div>
+                <p class="text-gray-600 mb-4">Host and conduct interviews for our video and podcast content, engaging with guests and audiences.</p>
+                <div class="flex flex-wrap gap-4 text-sm text-gray-500">
+                    <div class="flex items-center">
+                        <i class="fas fa-map-marker-alt mr-2"></i> Accra, Ghana
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-clock mr-2"></i> Available
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-briefcase mr-2"></i> Intern
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Job 6 - Graphic Designer -->
+            <div class="job-card bg-white border border-gray-200 rounded-xl p-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+                    <div>
+                        <h3 class="text-xl font-bold">Graphic Designer</h3>
+                        <div class="flex flex-wrap gap-3 mt-2">
+                            <span class="bg-indigo-100 text-indigo-800 text-sm px-3 py-1 rounded-full">Full-time</span>
+                            <span class="bg-yellow-100 text-yellow-800 text-sm px-3 py-1 rounded-full">Hybrid</span>
+                            <span class="bg-red-100 text-red-800 text-sm px-3 py-1 rounded-full">Design</span>
+                        </div>
+                    </div>
+                    <a href="https://bit.ly/ytv-interns" target="_blank" class="bg-indigo-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-indigo-700 transition mt-4 md:mt-0 inline-block apply-button">
+                        Apply Now
+                    </a>
+                </div>
+                <p class="text-gray-600 mb-4">Create visually stunning graphics for our digital platforms, social media, and marketing materials.</p>
+                <div class="flex flex-wrap gap-4 text-sm text-gray-500">
+                    <div class="flex items-center">
+                        <i class="fas fa-map-marker-alt mr-2"></i> Accra, Ghana
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-clock mr-2"></i> Available
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-briefcase mr-2"></i> Intern
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-12">
+            <p class="text-gray-600 mb-6">Don't see your perfect role? We're always looking for talented people!</p>
+            <a href="https://bit.ly/ytv-interns" target="_blank" class="border-2 border-indigo-600 text-indigo-600 px-6 py-2 rounded-full font-semibold hover:bg-indigo-600 hover:text-white transition">
+                Submit General Application
+            </a>
+        </div>
+    </div>
+</section>
+
+    <!-- Hiring Process Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4">Our Hiring Process</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">We've designed a transparent process to ensure the best fit for both candidates and our team</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-5xl mx-auto">
+                <!-- Step 1 -->
+                <div class="process-step bg-white p-6 rounded-xl text-center">
+                    <div class="w-16 h-16 rounded-full bg-indigo-100 flex items-center justify-center mb-4 mx-auto">
+                        <span class="text-indigo-600 font-bold text-xl">1</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Application Review</h3>
+                    <p class="text-gray-600">We review all applications and reach out to candidates who align with our needs.</p>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="process-step bg-white p-6 rounded-xl text-center">
+                    <div class="w-16 h-16 rounded-full bg-indigo-100 flex items-center justify-center mb-4 mx-auto">
+                        <span class="text-indigo-600 font-bold text-xl">2</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Initial Interview</h3>
+                    <p class="text-gray-600">A 30-minute video call to discuss your experience and career goals.</p>
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="process-step bg-white p-6 rounded-xl text-center">
+                    <div class="w-16 h-16 rounded-full bg-indigo-100 flex items-center justify-center mb-4 mx-auto">
+                        <span class="text-indigo-600 font-bold text-xl">3</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Skills Assessment</h3>
+                    <p class="text-gray-600">A practical task or presentation relevant to the role you're applying for.</p>
+                </div>
+                
+                <!-- Step 4 -->
+                <div class="process-step bg-white p-6 rounded-xl text-center">
+                    <div class="w-16 h-16 rounded-full bg-indigo-100 flex items-center justify-center mb-4 mx-auto">
+                        <span class="text-indigo-600 font-bold text-xl">4</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Team Interview</h3>
+                    <p class="text-gray-600">Meet the team and discuss how you'll collaborate and contribute to our mission.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4">Hear From Our Team</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">What it's really like to work at Youth TV</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card bg-gray-50 p-8 rounded-xl border border-gray-200">
+                    <div class="flex items-center mb-6">
+                        <div class="w-16 h-16 rounded-full overflow-hidden mr-4">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1376&q=80" 
+                                 alt="Aisha Mensah" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h3 class="font-bold">Aisha Mensah</h3>
+                            <p class="text-indigo-600">Content Producer</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">"Working at Youth TV has allowed me to combine my passion for media with my desire to make a difference. Every day I get to create content that actually impacts young lives."</p>
+                    <div class="flex mt-4">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card bg-gray-50 p-8 rounded-xl border border-gray-200">
+                    <div class="flex items-center mb-6">
+                        <div class="w-16 h-16 rounded-full overflow-hidden mr-4">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80" 
+                                 alt="Kwame Osei" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h3 class="font-bold">Kwame Osei</h3>
+                            <p class="text-indigo-600">Frontend Developer</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">"The culture here is amazing - supportive, collaborative, and focused on growth. I've learned more in my year at Youth TV than in my previous three jobs combined."</p>
+                    <div class="flex mt-4">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card bg-gray-50 p-8 rounded-xl border border-gray-200">
+                    <div class="flex items-center mb-6">
+                        <div class="w-16 h-16 rounded-full overflow-hidden mr-4">
+                            <img src="https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1467&q=80" 
+                                 alt="Esi Boateng" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h3 class="font-bold">Esi Boateng</h3>
+                            <p class="text-indigo-600">Social Media Manager</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">"What I love most is that leadership genuinely values our ideas. My suggestions aren't just heard - they're implemented. That level of trust is rare and empowering."</p>
+                    <div class="flex mt-4">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    
+    
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- About -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Youth TV</h3>
+                    <p class="text-gray-400 mb-4">Empowering the next generation through engaging content, education, and community.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="about.html" class="text-gray-400 hover:text-white">About Us</a></li>
+                        <li><a href="About.html#team" class="text-gray-400 hover:text-white">Our Team</a></li>
+                        <li><a href="career.html" class="text-gray-400 hover:text-white">Careers</a></li>
+                        <li><a href="contact.html" class="text-gray-400 hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Resources -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Resources</h3>
+                    <ul class="space-y-2">
+                        <li><a href="contact.html#FAQ" class="text-gray-400 hover:text-white">FAQ</a></li>
+                        <li><a href="blog.html" class="text-gray-400 hover:text-white">Blog</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Contact Us</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-center">
+                            <i class="fas fa-map-marker-alt mr-3"></i> Block 205, 21 Jordan Street, Madina Estates.
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone mr-3"></i> +233 30 291 8276
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-3"></i> info@youthtvonline.com
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-500 mb-4 md:mb-0">© 2023 Youth TV. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-500 hover:text-white">Privacy Policy</a>
+                    <a href="#" class="text-gray-500 hover:text-white">Terms of Service</a>
+                    <a href="#" class="text-gray-500 hover:text-white">Cookies Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('open');
+            });
+            
+            // Close mobile menu when clicking on links
+            document.querySelectorAll('#mobile-menu a').forEach(link => {
+                link.addEventListener('click', function() {
+                    mobileMenu.classList.remove('open');
+                });
+            });
+        });
+
+        // Job application buttons
+        document.querySelectorAll('.apply-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const jobTitle = this.closest('.job-card').querySelector('h3').textContent;
+                alert(`Thank you for your interest in the ${jobTitle} position! You'll be redirected to our application portal.`);
+                // Redirect to the application URL after a short delay
+                setTimeout(() => {
+                    window.location.href = "https://bit.ly/ytv-interns";
+                }, 1500);
+            });
+        });
+
+        // Newsletter form
+        const newsletterForm = document.querySelector('#newsletter form');
+        if (newsletterForm) {
+            newsletterForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = this.querySelector('input[type="email"]').value;
+                alert(`Thank you for subscribing to job alerts with ${email}! You'll receive our next opportunity update.`);
+                this.reset();
+            });
+        }
+    </script>
+</body>
+</html>

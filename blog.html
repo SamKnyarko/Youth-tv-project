@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youth TV Blog - Insights for the Next Generation</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .sticky {
+            position: sticky;
+            top: 0;
+        }
+        .z-50 {
+            z-index: 50;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .blog-card {
+            transition: all 0.3s ease;
+            height: 100%;
+            cursor: pointer; /* Ensures pointer cursor on entire card */
+        }
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        /* Fix for text elements inside cards */
+        .blog-card .card-content {
+            cursor: pointer; /* Ensures pointer cursor on content too */
+        }
+        .blog-card .card-content * {
+            cursor: pointer; /* All child elements get pointer */
+        }
+        .category-tag {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .category-tag:hover {
+            transform: scale(1.05);
+        }
+        .mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .mobile-menu.open {
+            max-height: 500px;
+        }
+        .pagination .active {
+            background-color: #667eea;
+            color: white;
+        }
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid rgba(102, 126, 234, 0.2);
+            border-bottom-color: #667eea;
+            border-radius: 50%;
+            display: inline-block;
+            animation: rotation 1s linear infinite;
+        }
+        @keyframes rotation {
+            0% { transform: rotate(0deg) }
+            100% { transform: rotate(360deg) }
+        }
+        .author-image {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .category-image {
+            height: 48px;
+            width: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            color: white;
+            font-size: 20px;
+        }
+        .category-career { background-color: #3b82f6; }
+        .category-technology { background-color: #8b5cf6; }
+        .category-education { background-color: #10b981; }
+        .category-entrepreneurship { background-color: #f59e0b; }
+        .category-culture { background-color: #ec4899; }
+        .featured-image {
+            height: 200px;
+            object-fit: cover;
+            width: 100%;
+        }
+        
+        /* Post Modal Styles */
+        .post-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            overflow-y: auto;
+        }
+        .post-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+        .post-modal.active .modal-content {
+            transform: translateY(0);
+        }
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0,0,0,0.2);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+        .close-modal:hover {
+            background: rgba(0,0,0,0.4);
+            transform: rotate(90deg);
+        }
+        .modal-header {
+            padding: 40px 40px 20px;
+            position: relative;
+        }
+        .modal-image {
+            height: 300px;
+            width: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .modal-body {
+            padding: 0 40px 40px;
+        }
+        .post-content {
+            line-height: 1.8;
+            color: #333;
+            font-size: 1.1rem;
+        }
+        .post-content h2, .post-content h3 {
+            margin-top: 1.5em;
+            margin-bottom: 0.8em;
+            color: #2d3748;
+        }
+        .post-content p {
+            margin-bottom: 1.5em;
+        }
+        .post-content ul, .post-content ol {
+            margin-left: 1.5em;
+            margin-bottom: 1.5em;
+        }
+        .post-content li {
+            margin-bottom: 0.5em;
+        }
+        .post-content blockquote {
+            border-left: 4px solid #667eea;
+            padding-left: 1.5em;
+            margin: 1.5em 0;
+            font-style: italic;
+            color: #4a5568;
+        }
+        .post-content pre {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1em;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5em 0;
+        }
+        .post-content code {
+            background: #edf2f7;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        .modal-footer {
+            padding: 20px 40px;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .social-share {
+            display: flex;
+            gap: 10px;
+        }
+        .social-share a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .social-share a:hover {
+            transform: translateY(-3px);
+        }
+        .share-facebook { background-color: #3b5998; }
+        .share-twitter { background-color: #1da1f2; }
+        .share-linkedin { background-color: #0077b5; }
+        .share-link { background-color: #667eea; }
+        .modal-loading {
+            min-height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        /* Custom blog styling */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .post-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            cursor: pointer; /* Ensures pointer cursor */
+        }
+        .post-card * {
+            cursor: pointer; /* All child elements get pointer */
+        }
+        .post-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .post-image {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+        }
+        .post-content-container {
+            padding: 1.5rem;
+        }
+        .post-category {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+        .post-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: #2d3748;
+        }
+        .post-excerpt {
+            color: #4a5568;
+            margin-bottom: 1rem;
+        }
+        .post-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            color: #718096;
+        }
+        .author-info {
+            display: flex;
+            align-items: center;
+        }
+        .post-stats {
+            display: flex;
+            gap: 1rem;
+        }
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        /* New cursor fix for all clickable elements */
+        .clickable {
+            cursor: pointer;
+        }
+        .clickable * {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white shadow-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo and brand -->
+                <div class="flex items-center">
+                    <a href="index.php" class="logo-container mr-3" style="height: 75px; width: px;" >
+                        <img src="logo.png" 
+                             alt="Youth TV Logo" 
+                             class="h-full hover:scale-105 transition-transform">
+                    </a>
+                </div>
+    
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex gap-8">
+                    <a href="index.php" class="text-gray-700 hover:text-indigo-600 font-medium relative group">
+                        Home
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-indigo-600 transition-all group-hover:w-full"></span>
+                    </a>
+                    <a href="news.html" class="text-gray-700 hover:text-indigo-600 font-medium relative group">
+                        News
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-indigo-600 transition-all group-hover:w-full"></span>
+                    </a>
+                    <a href="videos.html" class="text-gray-700 hover:text-indigo-600 font-medium relative group">
+                        Videos
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-indigo-600 transition-all group-hover:w-full"></span>
+                    </a>
+                    <a href="podcast.php" class="text-gray-700 hover:text-indigo-600 font-medium relative group">
+                        Podcasts
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-indigo-600 transition-all group-hover:w-full"></span>
+                    </a>
+                    <a href="blog.html" class="text-indigo-600 font-medium relative group">
+                        Blog
+                        <span class="absolute bottom-0 left-0 w-full h-0.5 bg-indigo-600"></span>
+                    </a>
+                    <a href="events.php" class="text-gray-700 hover:text-indigo-600 font-medium relative group">
+                        Events
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-indigo-600 transition-all group-hover:w-full"></span>
+                    </a>
+                </nav>
+    
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-700 focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+    
+                <!-- Subscribe button -->
+                <div class="hidden md:block">
+                    <button class="bg-indigo-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-indigo-700 transition-all shadow-md">
+                        Subscribe
+                    </button>
+                </div>
+            </div>
+    
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="mobile-menu md:hidden bg-white mt-2 rounded-lg shadow-xl">
+                <div class="px-2 pt-2 pb-4 space-y-2">
+                    <a href="index.php" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100">Home</a>
+                    <a href="news.html" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100">News</a>
+                    <a href="videos.html" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100">Videos</a>
+                    <a href="podcast.php" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100">Podcasts</a>
+                    <a href="blog.html" class="block px-3 py-2 rounded-md text-indigo-600 font-medium bg-indigo-50">Blog</a>
+                    <a href="events.php" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100">Events</a>
+                    <button class="w-full bg-indigo-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-indigo-700 transition mt-2">
+                        Subscribe
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg text-white py-20">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">Youth TV Blog</h1>
+            <p class="text-xl max-w-2xl mx-auto mb-8">Insights, stories, and perspectives for the next generation of leaders and innovators.</p>
+            <div class="max-w-lg mx-auto flex">
+                <input type="text" id="search-input" placeholder="Search blog posts..." class="flex-grow px-4 py-3 rounded-l-lg text-gray-800 focus:outline-none">
+                <button id="search-button" class="bg-indigo-800 px-6 py-3 rounded-r-lg font-semibold hover:bg-indigo-900 transition">
+                    <i class="fas fa-search mr-2"></i> Search
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Content -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- Main Content -->
+                <div class="lg:w-3/4">
+                    <!-- Categories -->
+                    <div class="flex flex-wrap gap-3 mb-8">
+                        <button class="category-tag bg-indigo-100 text-indigo-800 px-4 py-2 rounded-full font-medium ring-2 ring-indigo-600" data-category="all">
+                            All Topics
+                        </button>
+                        <button class="category-tag bg-blue-100 text-blue-800 px-4 py-2 rounded-full font-medium" data-category="career">
+                            Career
+                        </button>
+                        <button class="category-tag bg-green-100 text-green-800 px-4 py-2 rounded-full font-medium" data-category="technology">
+                            Technology
+                        </button>
+                        <button class="category-tag bg-purple-100 text-purple-800 px-4 py-2 rounded-full font-medium" data-category="education">
+                            Education
+                        </button>
+                        <button class="category-tag bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full font-medium" data-category="entrepreneurship">
+                            Entrepreneurship
+                        </button>
+                        <button class="category-tag bg-pink-100 text-pink-800 px-4 py-2 rounded-full font-medium" data-category="culture">
+                            Culture
+                        </button>
+                    </div>
+
+                    <!-- Blog Posts Grid -->
+                    <div class="blog-grid" id="blog-grid">
+                        <!-- Blog posts will be loaded here -->
+                    </div>
+
+                    <!-- Loading Indicator -->
+                    <div id="loading" class="text-center py-12">
+                        <div class="loader mx-auto mb-4"></div>
+                        <p class="text-indigo-600 font-medium">Loading blog posts...</p>
+                    </div>
+
+                    <!-- No Results Message -->
+                    <div id="no-results" class="hidden text-center py-12">
+                        <i class="fas fa-file-alt text-4xl text-indigo-600 mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">No posts found</h3>
+                        <p class="text-gray-600">Try selecting a different category or search term.</p>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="mt-12 flex justify-center">
+                        <div class="pagination flex gap-2" id="pagination">
+                            <!-- Pagination buttons will be generated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="lg:w-1/4">
+                    <!-- About Section -->
+                    <div class="bg-indigo-50 rounded-xl p-6 mb-8">
+                        <h3 class="text-xl font-bold mb-4 text-indigo-800">About Youth TV Blog</h3>
+                        <p class="text-gray-700 mb-4">We're dedicated to providing insightful content for the next generation of leaders, innovators, and changemakers.</p>
+                        <button class="w-full bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 transition">
+                            Follow Our Blog
+                        </button>
+                    </div>
+
+                    <!-- Popular Posts -->
+                    <div class="bg-gray-50 rounded-xl p-6 mb-8">
+                        <h3 class="text-xl font-bold mb-4">Popular Posts</h3>
+                        <div class="space-y-4" id="popular-posts">
+                            <!-- Popular posts will be loaded here -->
+                        </div>
+                    </div>
+
+                    <!-- Categories -->
+                    <div class="bg-gray-50 rounded-xl p-6 mb-8">
+                        <h3 class="text-xl font-bold mb-4">Categories</h3>
+                        <ul class="space-y-2" id="categories-list">
+                            <!-- Categories will be loaded here -->
+                        </ul>
+                    </div>
+
+                    <!-- Newsletter -->
+                    <div class="gradient-bg text-white rounded-xl p-6">
+                        <h3 class="text-xl font-bold mb-4">Subscribe to Our Blog</h3>
+                        <p class="mb-4">Get the latest posts delivered straight to your inbox.</p>
+                        <div class="flex gap-2">
+                            <input type="email" id="newsletter-email" placeholder="Your email" class="flex-grow px-4 py-2 rounded-lg bg-white bg-opacity-20 placeholder-indigo-200 text-white">
+                            <button id="subscribe-button" class="bg-white text-indigo-700 px-4 py-2 rounded-lg font-semibold">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                        <p id="subscribe-message" class="mt-2 text-sm text-indigo-200 hidden"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Post Modal -->
+    <div class="post-modal" id="post-modal">
+        <div class="close-modal" id="close-modal">
+            <i class="fas fa-times"></i>
+        </div>
+        <div class="modal-content">
+            <div class="modal-loading" id="modal-loading">
+                <div class="loader mx-auto mb-4"></div>
+                <p class="text-indigo-600 font-medium">Loading post...</p>
+            </div>
+            <div id="modal-loaded-content" class="hidden">
+                <div class="modal-header">
+                    <img id="modal-image" src="" alt="Post Image" class="modal-image mb-6">
+                    <div class="flex flex-wrap gap-3 mb-4">
+                        <span id="modal-category" class="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-medium"></span>
+                        <span id="modal-date" class="text-gray-500"></span>
+                    </div>
+                    <h1 id="modal-title" class="text-3xl font-bold text-gray-900 mb-4"></h1>
+                    <div class="flex items-center mb-6">
+                        <img id="modal-author-image" src="" alt="Author" class="author-image mr-3">
+                        <div>
+                            <div id="modal-author" class="font-medium"></div>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <span id="modal-read-time" class="mr-4"></span>
+                                <span id="modal-likes" class="flex items-center">
+                                    <i class="fas fa-heart text-red-500 mr-1"></i>
+                                    <span id="like-count"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div id="modal-content" class="post-content"></div>
+                </div>
+                <div class="modal-footer">
+                    <div class="social-share">
+                        <a href="#" class="share-facebook" title="Share on Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="share-twitter" title="Share on Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="share-linkedin" title="Share on LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="share-link" title="Copy link" id="copy-link">
+                            <i class="fas fa-link"></i>
+                        </a>
+                    </div>
+                    <button id="save-post" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition flex items-center">
+                        <i class="far fa-bookmark mr-2"></i> Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- About -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Youth TV</h3>
+                    <p class="text-gray-400 mb-4">Empowering the next generation through engaging content, education, and community.</p>
+                    <div class="flex space-x-4">
+                        <a href="https://www.facebook.com/youthtvgh/?locale=gn_PY" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://www.youtube.com/@youthtvghana" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="About.html" class="text-gray-400 hover:text-white">About Us</a></li>
+                        <li><a href="About.html#team" class="text-gray-400 hover:text-white">Our Team</a></li>
+                        <li><a href="career.html" class="text-gray-400 hover:text-white">Careers</a></li>
+                        <li><a href="contact.html" class="text-gray-400 hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Categories - Updated with category links -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Categories</h3>
+                    <ul class="space-y-2">
+                        <li><a href="news.html?category=general" class="text-gray-400 hover:text-white">General</a></li>
+                        <li><a href="news.html?category=sports" class="text-gray-400 hover:text-white">Sports</a></li>
+                        <li><a href="news.html?category=technology" class="text-gray-400 hover:text-white">Technology</a></li>
+                        <li><a href="news.html?category=business" class="text-gray-400 hover:text-white">Business</a></li>
+                        <li><a href="news.html?category=entertainment" class="text-gray-400 hover:text-white">Entertainment</a></li>
+                        <li><a href="news.html?category=health" class="text-gray-400 hover:text-white">Health</a></li>
+                        <li><a href="news.html?category=science" class="text-gray-400 hover:text-white">Science</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Contact Us</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-center">
+                            <i class="fas fa-map-marker-alt mr-3"></i> Block 205, 21 Jordan Street, Madina Estates.
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone mr-3"></i> +233 30 291 8276
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-3"></i> info@youthtvonline.com
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-500 mb-4 md:mb-0">© 2025 Youth TV. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <p class="text-gray-500 mb-4 md:mb-0">Powered By YouthTV</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('open');
+            });
+        });
+    
+        // Dev.to API Configuration
+        const DEV_TO_API_URL = 'https://dev.to/api/articles';
+        const POSTS_PER_PAGE = 6;
+        let currentPage = 1;
+        let currentCategory = 'all';
+        let allPosts = [];
+        let filteredPosts = [];
+        let popularPosts = [];
+        let categoryCounts = {
+            'career': 0,
+            'technology': 0,
+            'education': 0,
+            'entrepreneurship': 0,
+            'culture': 0
+        };
+    
+        // Category mapping to dev.to tags
+        const categoryMapping = {
+            'career': 'career',
+            'technology': 'webdev',
+            'education': 'education',
+            'entrepreneurship': 'entrepreneurship',
+            'culture': 'culture'
+        };
+    
+        // Function to fetch blog posts from dev.to API
+        async function fetchBlogPosts() {
+            try {
+                // Show loading indicator
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('no-results').classList.add('hidden');
+                
+                // Fetch popular posts (top articles with highest positive reactions)
+                const popularResponse = await fetch(`${DEV_TO_API_URL}?top=30&per_page=3`);
+                if (!popularResponse.ok) throw new Error('Failed to fetch popular posts');
+                const popularData = await popularResponse.json();
+                popularPosts = popularData;
+                renderPopularPosts();
+                
+                // Fetch posts for all categories
+                const categoryPromises = Object.entries(categoryMapping).map(async ([category, tag]) => {
+                    try {
+                        const response = await fetch(`${DEV_TO_API_URL}?tag=${tag}&per_page=20`);
+                        if (!response.ok) throw new Error(`Failed to fetch ${category} posts`);
+                        const data = await response.json();
+                        return data.map(post => ({
+                            ...post,
+                            category: category,
+                            featured_image: post.cover_image || post.social_image || 
+                                         'https://images.unsplash.com/photo-1541462608143-67571c6738dd?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80',
+                            title: post.title,
+                            excerpt: { rendered: post.description || "Read this insightful article..." },
+                            content: { rendered: "" }, // We'll fetch full content later
+                            date: post.published_at,
+                            author: post.user?.name || 'Dev.to Author',
+                            positive_reactions_count: post.positive_reactions_count || 0
+                        }));
+                    } catch (error) {
+                        console.error(`Error fetching ${category} posts:`, error);
+                        return [];
+                    }
+                });
+                
+                // Wait for all category requests to complete
+                const categoryResults = await Promise.all(categoryPromises);
+                
+                // Combine all posts and remove duplicates
+                const allCategoryPosts = [].concat(...categoryResults);
+                const uniquePosts = allCategoryPosts.filter(
+                    (post, index, self) => index === self.findIndex(p => p.id === post.id)
+                );
+                
+                // Update category counts
+                uniquePosts.forEach(post => {
+                    if (categoryCounts[post.category] !== undefined) {
+                        categoryCounts[post.category]++;
+                    }
+                });
+                
+                // Render category counts in sidebar
+                renderCategoryCounts();
+                
+                // Set all posts and render
+                allPosts = uniquePosts;
+                filteredPosts = [...allPosts];
+                renderBlogPosts();
+                
+            } catch (error) {
+                console.error('Error fetching blog posts:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('no-results').classList.remove('hidden');
+                document.getElementById('no-results').innerHTML = `
+                    <i class="fas fa-exclamation-triangle text-4xl text-red-500 mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">Error loading posts</h3>
+                    <p class="text-gray-600">${error.message}. Please try again later.</p>
+                `;
+            }
+        }
+    
+        // Function to render popular posts in sidebar
+        function renderPopularPosts() {
+            const popularContainer = document.getElementById('popular-posts');
+            popularContainer.innerHTML = popularPosts.map(post => `
+                <div class="flex clickable" data-id="${post.id}">
+                    <div class="w-16 h-16 flex-shrink-0">
+                        <img src="${post.cover_image || post.social_image || 'https://images.unsplash.com/photo-1541462608143-67571c6738dd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&h=300&q=80'}" 
+                             alt="${post.title}" class="w-full h-full object-cover rounded-lg">
+                    </div>
+                    <div class="ml-4">
+                        <h4 class="font-bold text-gray-800 hover:text-indigo-600">${post.title}</h4>
+                        <div class="text-xs text-gray-500 mt-1">${new Date(post.published_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Add click event to popular posts
+            document.querySelectorAll('#popular-posts > div').forEach(item => {
+                item.addEventListener('click', () => {
+                    const id = item.dataset.id;
+                    const post = allPosts.find(p => p.id.toString() === id);
+                    if (post) {
+                        openPostModal(post);
+                    }
+                });
+            });
+        }
+    
+        // Function to render category counts
+        function renderCategoryCounts() {
+            const categoriesList = document.getElementById('categories-list');
+            categoriesList.innerHTML = `
+                <li>
+                    <a href="#" class="flex justify-between text-gray-700 hover:text-indigo-600 clickable" data-category="career">
+                        <span>Career Development</span>
+                        <span class="bg-gray-200 rounded-full px-2 text-sm">${categoryCounts.career}</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex justify-between text-gray-700 hover:text-indigo-600 clickable" data-category="technology">
+                        <span>Tech & Innovation</span>
+                        <span class="bg-gray-200 rounded-full px-2 text-sm">${categoryCounts.technology}</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex justify-between text-gray-700 hover:text-indigo-600 clickable" data-category="education">
+                        <span>Education</span>
+                        <span class="bg-gray-200 rounded-full px-2 text-sm">${categoryCounts.education}</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex justify-between text-gray-700 hover:text-indigo-600 clickable" data-category="entrepreneurship">
+                        <span>Entrepreneurship</span>
+                        <span class="bg-gray-200 rounded-full px-2 text-sm">${categoryCounts.entrepreneurship}</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex justify-between text-gray-700 hover:text-indigo-600 clickable" data-category="culture">
+                        <span>Youth Culture</span>
+                        <span class="bg-gray-200 rounded-full px-2 text-sm">${categoryCounts.culture}</span>
+                    </a>
+                </li>
+            `;
+            
+            // Add event listeners to sidebar category links
+            document.querySelectorAll('#categories-list a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const category = link.dataset.category;
+                    document.querySelector(`.category-tag[data-category="${category}"]`).click();
+                });
+            });
+        }
+    
+        // Function to create blog post card
+        function createBlogCard(post) {
+            const categoryColors = {
+                career: 'bg-blue-100 text-blue-800',
+                technology: 'bg-indigo-100 text-indigo-800',
+                education: 'bg-green-100 text-green-800',
+                entrepreneurship: 'bg-yellow-100 text-yellow-800',
+                culture: 'bg-pink-100 text-pink-800'
+            };
+            
+            // Calculate read time for excerpt
+            const wordCount = post.excerpt.rendered ? post.excerpt.rendered.split(' ').length : 0;
+            const readTime = Math.max(1, Math.ceil(wordCount / 200));
+            
+            // Extract excerpt from content
+            const excerpt = post.excerpt.rendered || "Read this insightful article...";
+            
+            return `
+                <div class="post-card" data-id="${post.id}">
+                    <div class="h-48 overflow-hidden">
+                        <img src="${post.featured_image}" 
+                             alt="${post.title}" 
+                             class="post-image w-full h-full object-cover">
+                    </div>
+                    <div class="post-content-container">
+                        <span class="post-category ${categoryColors[post.category]}">
+                            ${post.category.charAt(0).toUpperCase() + post.category.slice(1)}
+                        </span>
+                        <h3 class="post-title">${post.title}</h3>
+                        <p class="post-excerpt">${excerpt}</p>
+                        <div class="post-meta">
+                            <div class="author-info">
+                                <img src="https://i.pravatar.cc/150?u=${post.author}" 
+                                     alt="${post.author}" 
+                                     class="author-image mr-2">
+                                <span class="text-sm text-gray-700">${post.author}</span>
+                            </div>
+                            <div class="post-stats">
+                                <span class="stat-item">
+                                    <i class="fas fa-heart text-red-500"></i>
+                                    ${post.positive_reactions_count}
+                                </span>
+                                <span class="stat-item">
+                                    <i class="fas fa-clock text-indigo-500"></i>
+                                    ${readTime} min
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+    
+        // Function to render blog posts
+        function renderBlogPosts() {
+            const blogGrid = document.getElementById('blog-grid');
+            const loading = document.getElementById('loading');
+            const noResults = document.getElementById('no-results');
+            
+            // Hide loading indicator
+            loading.style.display = 'none';
+            
+            // Calculate pagination
+            const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
+            const paginatedPosts = filteredPosts.slice(startIndex, startIndex + POSTS_PER_PAGE);
+            
+            // Render posts
+            if (paginatedPosts.length > 0) {
+                blogGrid.innerHTML = paginatedPosts.map(createBlogCard).join('');
+                noResults.classList.add('hidden');
+                
+                // Add click event to blog cards
+                document.querySelectorAll('.post-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        const id = card.dataset.id;
+                        const post = allPosts.find(p => p.id.toString() === id);
+                        if (post) {
+                            openPostModal(post);
+                        }
+                    });
+                });
+            } else {
+                blogGrid.innerHTML = '';
+                noResults.classList.remove('hidden');
+            }
+            
+            // Update pagination
+            updatePagination();
+        }
+    
+        // Function to update pagination
+        function updatePagination() {
+            const paginationContainer = document.getElementById('pagination');
+            const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
+            
+            if (totalPages <= 1) {
+                paginationContainer.style.display = 'none';
+                return;
+            }
+            
+            paginationContainer.style.display = 'flex';
+            
+            // Generate pagination buttons
+            let paginationHTML = `
+                <button class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center hover:bg-indigo-600 hover:text-white transition" 
+                        ${currentPage === 1 ? 'disabled' : ''} id="prev-page">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            `;
+            
+            // Show up to 5 pages at a time
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(totalPages, startPage + 4);
+            
+            if (endPage - startPage < 4) {
+                startPage = Math.max(1, endPage - 4);
+            }
+            
+            for (let i = startPage; i <= endPage; i++) {
+                paginationHTML += `
+                    <button class="w-10 h-10 rounded-full flex items-center justify-center font-medium transition 
+                                ${i === currentPage ? 'bg-indigo-600 text-white' : 'bg-gray-200 hover:bg-indigo-600 hover:text-white'}"
+                            data-page="${i}">
+                        ${i}
+                    </button>
+                `;
+            }
+            
+            paginationHTML += `
+                <button class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center hover:bg-indigo-600 hover:text-white transition"
+                        ${currentPage === totalPages ? 'disabled' : ''} id="next-page">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            `;
+            
+            paginationContainer.innerHTML = paginationHTML;
+            
+            // Add event listeners to pagination buttons
+            document.querySelectorAll('#pagination button[data-page]').forEach(button => {
+                button.addEventListener('click', () => {
+                    currentPage = parseInt(button.dataset.page);
+                    renderBlogPosts();
+                });
+            });
+            
+            // Add event listeners to prev/next buttons
+            const prevButton = document.getElementById('prev-page');
+            const nextButton = document.getElementById('next-page');
+            
+            prevButton.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderBlogPosts();
+                }
+            });
+            
+            nextButton.addEventListener('click', () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderBlogPosts();
+                }
+            });
+        }
+    
+        // Function to filter by category
+        function filterByCategory(category) {
+            currentCategory = category;
+            currentPage = 1;
+            
+            if (category === 'all') {
+                filteredPosts = [...allPosts];
+            } else {
+                filteredPosts = allPosts.filter(post => post.category === category);
+            }
+            
+            renderBlogPosts();
+        }
+    
+        // Function to search blog posts
+        function searchBlogPosts(query) {
+            query = query.toLowerCase().trim();
+            
+            if (query === '') {
+                filteredPosts = [...allPosts];
+            } else {
+                filteredPosts = allPosts.filter(post => 
+                    post.title.toLowerCase().includes(query) || 
+                    (post.excerpt.rendered && post.excerpt.rendered.toLowerCase().includes(query)) ||
+                    (post.author && post.author.toLowerCase().includes(query)) ||
+                    post.category.toLowerCase().includes(query)
+                );
+            }
+            
+            currentPage = 1;
+            renderBlogPosts();
+        }
+    
+        // Function to handle category filtering
+        function setupCategoryFilters() {
+            document.querySelectorAll('.category-tag').forEach(tag => {
+                tag.addEventListener('click', () => {
+                    // Update active category styling
+                    document.querySelectorAll('.category-tag').forEach(t => {
+                        t.classList.remove('ring-2', 'ring-indigo-600');
+                    });
+                    tag.classList.add('ring-2', 'ring-indigo-600');
+                    
+                    // Filter posts
+                    filterByCategory(tag.dataset.category);
+                });
+            });
+        }
+        
+        // Function to fetch full post content
+        async function fetchFullPostContent(postId) {
+            try {
+                const response = await fetch(`${DEV_TO_API_URL}/${postId}`);
+                if (!response.ok) throw new Error('Failed to fetch post content');
+                const data = await response.json();
+                return data.body_html || "<p>No content available</p>";
+            } catch (error) {
+                console.error('Error fetching post content:', error);
+                return "<p>Error loading content. Please try again later.</p>";
+            }
+        }
+        
+        // Function to open post modal
+        async function openPostModal(post) {
+            const modal = document.getElementById('post-modal');
+            const modalContent = document.getElementById('modal-loaded-content');
+            const modalLoading = document.getElementById('modal-loading');
+            
+            // Show modal with loading state
+            modal.classList.add('active');
+            modalLoading.style.display = 'flex';
+            modalContent.classList.add('hidden');
+            
+            // Fetch full post content
+            const fullContent = await fetchFullPostContent(post.id);
+            
+            // Calculate read time for full content
+            const wordCount = fullContent ? fullContent.split(' ').length : 0;
+            const readTime = Math.max(1, Math.ceil(wordCount / 200));
+            
+            // Set modal content
+            document.getElementById('modal-image').src = post.featured_image;
+            document.getElementById('modal-category').textContent = post.category.charAt(0).toUpperCase() + post.category.slice(1);
+            document.getElementById('modal-date').textContent = new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('modal-title').textContent = post.title;
+            document.getElementById('modal-author-image').src = `https://i.pravatar.cc/150?u=${post.author}`;
+            document.getElementById('modal-author').textContent = post.author;
+            document.getElementById('modal-read-time').textContent = `${readTime} min read`;
+            document.getElementById('modal-content').innerHTML = fullContent;
+            document.getElementById('like-count').textContent = post.positive_reactions_count;
+            
+            // Update modal state
+            modalLoading.style.display = 'none';
+            modalContent.classList.remove('hidden');
+        }
+    
+        // Initialize the blog
+        async function initBlog() {
+            setupCategoryFilters();
+            await fetchBlogPosts();
+            
+            // Search functionality
+            document.getElementById('search-button').addEventListener('click', () => {
+                const query = document.getElementById('search-input').value;
+                searchBlogPosts(query);
+            });
+            
+            document.getElementById('search-input').addEventListener('keyup', (e) => {
+                if (e.key === 'Enter') {
+                    const query = document.getElementById('search-input').value;
+                    searchBlogPosts(query);
+                }
+            });
+            
+            // Newsletter subscription
+            document.getElementById('subscribe-button').addEventListener('click', () => {
+                const email = document.getElementById('newsletter-email').value;
+                const message = document.getElementById('subscribe-message');
+                
+                if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    message.textContent = "Thank you for subscribing!";
+                    message.classList.remove('hidden', 'text-red-300');
+                    message.classList.add('text-green-300');
+                    
+                    // Clear input
+                    document.getElementById('newsletter-email').value = '';
+                    
+                    // Hide message after 3 seconds
+                    setTimeout(() => {
+                        message.classList.add('hidden');
+                    }, 3000);
+                } else {
+                    message.textContent = "Please enter a valid email address.";
+                    message.classList.remove('hidden', 'text-green-300');
+                    message.classList.add('text-red-300');
+                }
+            });
+            
+            // Modal functionality
+            document.getElementById('close-modal').addEventListener('click', () => {
+                document.getElementById('post-modal').classList.remove('active');
+            });
+            
+            document.getElementById('post-modal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('post-modal')) {
+                    document.getElementById('post-modal').classList.remove('active');
+                }
+            });
+            
+            // Copy link functionality
+            document.getElementById('copy-link').addEventListener('click', (e) => {
+                e.preventDefault();
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    const tooltip = document.createElement('div');
+                    tooltip.textContent = 'Link copied!';
+                    tooltip.classList.add('bg-indigo-600', 'text-white', 'px-3', 'py-1', 'rounded', 'text-sm', 'absolute', 'top-0', 'right-0', 'mt-12', 'mr-4');
+                    document.getElementById('copy-link').appendChild(tooltip);
+                    
+                    setTimeout(() => {
+                        tooltip.remove();
+                    }, 2000);
+                });
+            });
+            
+            // Save post functionality
+            document.getElementById('save-post').addEventListener('click', function() {
+                this.innerHTML = '<i class="fas fa-bookmark mr-2"></i> Saved';
+                this.classList.add('bg-indigo-800');
+                setTimeout(() => {
+                    this.innerHTML = '<i class="far fa-bookmark mr-2"></i> Save';
+                    this.classList.remove('bg-indigo-800');
+                }, 2000);
+            });
+        }
+    
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initBlog);
+    </script>
+</body>
+</html>

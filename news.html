@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youth TV - News</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .autocomplete-items {
+            position: absolute;
+            border: 1px solid #e5e7eb;
+            border-top: none;
+            z-index: 99;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 0 0 0.5rem 0.5rem;
+        }
+        .autocomplete-item {
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .autocomplete-item:hover {
+            background-color: #f3f4f6;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .news-card {
+            transition: all 0.3s ease;
+        }
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .category-tab.active {
+            border-bottom: 3px solid #667eea;
+            color: #667eea;
+            font-weight: 600;
+        }
+        .mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .mobile-menu.open {
+            max-height: 500px;
+        }
+        .logo-container {
+            height: 50px;
+            display: flex;
+            align-items: center;
+        }
+        .fa-spinner {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .tag {
+            background-color: #e0e7ff;
+            color: #4f46e5;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .tag:hover {
+            background-color: #c7d2fe;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo and brand -->
+                <div class="flex items-center">
+                    <a href="index.php" class="logo-container mr-3" style="height: 75px;">
+                        <img src="logo.png" 
+                             alt="Youth TV Logo" 
+                             class="h-full hover:scale-105 transition-transform">
+                    </a>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex gap-8">
+                    <a href="index.php" class="hover:text-gray-200 font-medium">Home</a>
+                    <a href="news.html" class="hover:text-gray-200 font-medium">News</a>
+                    <a href="videos.html" class="hover:text-gray-200 font-medium">Videos</a>
+                    <a href="podcast.php" class="hover:text-gray-200 font-medium">Podcasts</a>
+                    <a href="blog.html" class="hover:text-gray-200 font-medium">Blog</a>
+                    <a href="events.php" class="hover:text-gray-200 font-medium">Events</a>
+                </nav>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-white focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+
+                <!-- Subscribe button (hidden on mobile) -->
+                <div class="hidden md:block">
+                    
+                </div>
+            </div>
+
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="mobile-menu md:hidden bg-indigo-800 mt-2 rounded-lg">
+                <div class="px-2 pt-2 pb-4 space-y-2">
+                    <a href="index.php" class="block px-3 py-2 rounded-md hover:bg-indigo-700">Home</a>
+                    <a href="news.html" class="block px-3 py-2 rounded-md hover:bg-indigo-700">News</a>
+                    <a href="videos.html" class="block px-3 py-2 rounded-md hover:bg-indigo-700">Videos</a>
+                    <a href="podcast.php" class="block px-3 py-2 rounded-md hover:bg-indigo-700">Podcasts</a>
+                    <a href="blog.html" class="block px-3 py-2 rounded-md hover:bg-indigo-700">Blog</a>
+                    <a href="events.php" class="block px-3 py-2 rounded-md hover:bg-indigo-700">Events</a>
+                     <button class="w-full bg-white text-indigo-700 px-4 py-2 rounded-full font-semibold hover:bg-gray-100 transition mt-2">
+                       <a href="#newsletter"></a> Subscribe</a>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="py-12">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto mb-12 text-center">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">Latest News</h1>
+                <div class="relative">
+                    <input type="text" id="search-input" placeholder="Search news..." 
+                           class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                           autocomplete="off">
+                    <button id="search-button" class="absolute right-3 top-3 text-gray-400">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <div id="autocomplete-list" class="autocomplete-items hidden"></div>
+                </div>
+            </div>
+
+            <!-- Loading Indicator -->
+            <div id="loading" class="text-center py-8">
+                <i class="fas fa-spinner fa-spin text-2xl text-indigo-600"></i>
+                <p class="mt-2">Loading news...</p>
+            </div>
+
+            <!-- Error Message -->
+            <div id="error-message" class="hidden text-center py-8 text-red-600">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p class="mt-2">Failed to load news. Please try again later.</p>
+            </div>
+
+            <!-- Category Tabs - Updated with all categories -->
+            <div class="flex justify-center mb-8 border-b border-gray-200">
+                <button class="category-tab px-6 py-2" data-category="general">General</button>
+                <button class="category-tab px-6 py-2" data-category="sports">Sports</button>
+                <button class="category-tab px-6 py-2" data-category="technology">Tech</button>
+                <button class="category-tab px-6 py-2" data-category="business">Business</button>
+                <button class="category-tab px-6 py-2" data-category="entertainment">Entertainment</button>
+                <button class="category-tab px-6 py-2" data-category="health">Health</button>
+                <button class="category-tab px-6 py-2" data-category="science">Science</button>
+            </div>
+
+            <div class="lg:flex gap-8">
+                <!-- Main Content -->
+                <div class="lg:w-2/3">
+                    <!-- Featured Article -->
+                    <div id="featured-article"></div>
+
+                    <!-- News Grid -->
+                    <div class="grid md:grid-cols-2 gap-8" id="news-grid"></div>
+
+                    <!-- Pagination -->
+                    <div class="mt-12 flex justify-center gap-2" id="pagination"></div>
+                </div>
+
+                <!-- Sidebar -->
+                <aside class="lg:w-1/3 mt-12 lg:mt-0">
+                    <div class="bg-white p-6 rounded-xl shadow-md mb-8">
+                        <h3 class="text-lg font-bold mb-4">News Categories</h3>
+                        <ul class="space-y-2" id="categories"></ul>
+                    </div>
+                
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-lg font-bold mb-4">Trending Tags</h3>
+                        <div class="tag-cloud" id="tags"></div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- About -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Youth TV</h3>
+                    <p class="text-gray-400 mb-4">Empowering the next generation through engaging content, education, and community.</p>
+                    <div class="flex space-x-4">
+                        <a href="https://www.facebook.com/youthtvgh/?locale=gn_PY" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://www.youtube.com/@youthtvghana" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="About.html" class="text-gray-400 hover:text-white">About Us</a></li>
+                        <li><a href="About.html#team" class="text-gray-400 hover:text-white">Our Team</a></li>
+                        <li><a href="career.html" class="text-gray-400 hover:text-white">Careers</a></li>
+                        <li><a href="contact.html" class="text-gray-400 hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Categories - Updated with category links -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Categories</h3>
+                    <ul class="space-y-2">
+                        <li><a href="news.html?category=general" class="text-gray-400 hover:text-white">General</a></li>
+                        <li><a href="news.html?category=sports" class="text-gray-400 hover:text-white">Sports</a></li>
+                        <li><a href="news.html?category=technology" class="text-gray-400 hover:text-white">Technology</a></li>
+                        <li><a href="news.html?category=business" class="text-gray-400 hover:text-white">Business</a></li>
+                        <li><a href="news.html?category=entertainment" class="text-gray-400 hover:text-white">Entertainment</a></li>
+                        <li><a href="news.html?category=health" class="text-gray-400 hover:text-white">Health</a></li>
+                        <li><a href="news.html?category=science" class="text-gray-400 hover:text-white">Science</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Contact Us</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-center">
+                            <i class="fas fa-map-marker-alt mr-3"></i> Block 205, 21 Jordan Street, Madina Estates.
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone mr-3"></i> +233 30 291 8276
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-3"></i> info@youthtvonline.com
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-500 mb-4 md:mb-0">© 2025 Youth TV. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <p class="text-gray-500 mb-4 md:mb-0">Powered By YouthTV</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const API_KEY = 'de0e69ec1e2645f98ebdf97e89fff832';
+        const CATEGORIES = [
+            { name: 'General', value: 'general' },
+            { name: 'Sports', value: 'sports' },
+            { name: 'Technology', value: 'technology' },
+            { name: 'Business', value: 'business' },
+            { name: 'Entertainment', value: 'entertainment' },
+            { name: 'Health', value: 'health' },
+            { name: 'Science', value: 'science' }
+        ];
+
+        let currentCategory = 'general';
+        let currentSearchQuery = '';
+        let currentPage = 1;
+        const pageSize = 10;
+        let totalResults = 0;
+        let currentRequest = null;
+        const debounceDelay = 100;
+
+        // Utility function to get URL parameters
+        function getUrlParameter(name) {
+            name = name.replace(/[\[\]]/g, '\\$&');
+            const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+            const results = regex.exec(window.location.search);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+
+        // Fetch news from API
+        async function fetchNews(category = 'general', searchQuery = '', page = 1) {
+            try {
+                let apiUrl;
+                if (searchQuery) {
+                    apiUrl = `https://newsapi.org/v2/everything?q=${encodeURIComponent(searchQuery)}&pageSize=${pageSize}&page=${page}&apiKey=${API_KEY}`;
+                } else {
+                    apiUrl = `https://newsapi.org/v2/top-headlines?country=us&category=${category}&pageSize=${pageSize}&page=${page}&apiKey=${API_KEY}`;
+                }
+
+                const proxyUrl = 'https://api.allorigins.win/get?url=';
+                const response = await fetch(proxyUrl + encodeURIComponent(apiUrl));
+                
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                
+                const data = await response.json();
+                const result = JSON.parse(data.contents);
+                totalResults = result.totalResults;
+                return result;
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('error-message').classList.remove('hidden');
+                throw error;
+            }
+        }
+
+        // Handle category change
+        async function handleCategoryChange(category) {
+            try {
+                document.getElementById('loading').classList.remove('hidden');
+                document.getElementById('error-message').classList.add('hidden');
+                
+                currentCategory = category;
+                currentSearchQuery = '';
+                currentPage = 1;
+                document.getElementById('search-input').value = '';
+
+                // Update active tab
+                document.querySelectorAll('.category-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                    if (tab.dataset.category === category) {
+                        tab.classList.add('active');
+                    }
+                });
+                
+                const response = await fetchNews(category, '', currentPage);
+                
+                if (response.status === 'ok') {
+                    renderNews(response.articles);
+                    renderPagination(response.totalResults, currentPage);
+                    renderTrendingTags(response.articles); // Added this call
+                } else {
+                    throw new Error(response.message || 'Unknown error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('error-message').classList.remove('hidden');
+                document.getElementById('error-message').querySelector('p').textContent = 
+                    `Error: ${error.message}`;
+            } finally {
+                document.getElementById('loading').classList.add('hidden');
+            }
+        }
+
+        // Handle search
+        async function handleSearch(page = 1) {
+            currentPage = page;
+            const searchInput = document.getElementById('search-input');
+            currentSearchQuery = searchInput.value.trim();
+            
+            try {
+                document.getElementById('loading').classList.remove('hidden');
+                document.getElementById('error-message').classList.add('hidden');
+                
+                const response = await fetchNews(currentCategory, currentSearchQuery, currentPage);
+                
+                if (response.status === 'ok') {
+                    totalResults = response.totalResults;
+                    renderNews(response.articles);
+                    renderPagination(totalResults, currentPage);
+                    renderTrendingTags(response.articles); // Added this call
+                } else {
+                    throw new Error(response.message || 'Unknown error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('error-message').classList.remove('hidden');
+                document.getElementById('error-message').querySelector('p').textContent = 
+                    `Error: ${error.message}`;
+            } finally {
+                document.getElementById('loading').classList.add('hidden');
+            }
+        }
+
+        // Render news articles
+        function renderNews(articles) {
+            const newsGrid = document.getElementById('news-grid');
+            const featuredContainer = document.getElementById('featured-article');
+            const existingFeedback = newsGrid.previousElementSibling?.classList?.contains('search-feedback');
+
+            // Remove previous feedback if exists
+            if (existingFeedback) {
+                newsGrid.previousElementSibling.remove();
+            }
+
+            // Clear existing content
+            newsGrid.innerHTML = '';
+            featuredContainer.innerHTML = '';
+
+            // Add search feedback
+            if (currentSearchQuery) {
+                const start = ((currentPage - 1) * pageSize) + 1;
+                const end = Math.min(currentPage * pageSize, totalResults);
+                
+                const searchFeedback = document.createElement('div');
+                searchFeedback.className = 'search-feedback col-span-full text-center mb-8';
+                searchFeedback.innerHTML = `
+                    <p class="text-gray-600">
+                        Showing ${start}-${end} of ${totalResults} results for: 
+                        <span class="font-semibold">"${currentSearchQuery}"</span>
+                    </p>
+                `;
+                newsGrid.parentNode.insertBefore(searchFeedback, newsGrid);
+            }
+
+            // Render articles
+            if (articles.length > 0) {
+                articles.forEach(article => {
+                    newsGrid.insertAdjacentHTML('beforeend', createNewsCard(article));
+                });
+            } else {
+                newsGrid.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <p class="text-gray-600">No articles found matching your search.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Create news card HTML
+        function createNewsCard(article) {
+            return `
+                <article class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <img src="${article.urlToImage || 'https://via.placeholder.com/400x200'}" 
+                         alt="${article.title}" 
+                         class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center text-sm text-gray-500 mb-2">
+                            <span>${article.source.name}</span>
+                            <span class="mx-2">•</span>
+                            <span>${new Date(article.publishedAt).toLocaleDateString()}</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">${article.title}</h3>
+                        <p class="text-gray-600 mb-4">${article.description || ''}</p>
+                        <div class="flex items-center justify-between">
+                            <a href="${article.url}" target="_blank" 
+                               class="text-indigo-600 hover:text-indigo-800">
+                                Read More
+                            </a>
+                            <span class="text-sm text-gray-500">
+                                ${Math.ceil((article.content?.split(' ').length || 0) / 200)} min read
+                            </span>
+                        </div>
+                    </div>
+                </article>
+            `;
+        }
+
+        // Render pagination
+        function renderPagination(totalResults, currentPage) {
+            const paginationDiv = document.getElementById('pagination');
+            const totalPages = Math.ceil(totalResults / pageSize);
+            const maxVisiblePages = 5;
+            let startPage, endPage;
+
+            if (totalPages <= maxVisiblePages) {
+                startPage = 1;
+                endPage = totalPages;
+            } else {
+                const maxPagesBeforeCurrent = Math.floor(maxVisiblePages / 2);
+                const maxPagesAfterCurrent = Math.ceil(maxVisiblePages / 2) - 1;
+                
+                if (currentPage <= maxPagesBeforeCurrent) {
+                    startPage = 1;
+                    endPage = maxVisiblePages;
+                } else if (currentPage + maxPagesAfterCurrent >= totalPages) {
+                    startPage = totalPages - maxVisiblePages + 1;
+                    endPage = totalPages;
+                } else {
+                    startPage = currentPage - maxPagesBeforeCurrent;
+                    endPage = currentPage + maxPagesAfterCurrent;
+                }
+            }
+
+            let paginationHTML = '';
+            
+            // Previous button
+            paginationHTML += `
+                <button onclick="handleSearch(${currentPage - 1})" 
+                        ${currentPage === 1 ? 'disabled' : ''}
+                        class="px-4 py-2 rounded-lg ${currentPage === 1 ? 'bg-gray-200' : 'bg-white shadow-md hover:bg-gray-50'}">
+                    &laquo; Previous
+                </button>
+            `;
+
+            // Page numbers
+            for (let i = startPage; i <= endPage; i++) {
+                paginationHTML += `
+                    <button onclick="handleSearch(${i})" 
+                            class="px-4 py-2 rounded-lg ${i === currentPage ? 'bg-indigo-600 text-white' : 'bg-white hover:bg-gray-50'} shadow-md">
+                        ${i}
+                    </button>
+                `;
+            }
+
+            // Next button
+            paginationHTML += `
+                <button onclick="handleSearch(${currentPage + 1})" 
+                        ${currentPage === totalPages ? 'disabled' : ''}
+                        class="px-4 py-2 rounded-lg ${currentPage === totalPages ? 'bg-gray-200' : 'bg-white shadow-md hover:bg-gray-50'}">
+                    Next &raquo;
+                </button>
+            `;
+
+            paginationDiv.innerHTML = paginationHTML;
+        }
+
+        // Render categories in sidebar
+        function renderCategories() {
+            const categoriesContainer = document.getElementById('categories');
+            categoriesContainer.innerHTML = CATEGORIES.map(category => `
+                <li>
+                    <button class="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors category-filter" 
+                            data-category="${category.value}">
+                        ${category.name}
+                    </button>
+                </li>
+            `).join('');
+        }
+
+        // Extract trending tags from articles
+        function extractTrendingTags(articles) {
+            const stopWords = new Set(['the', 'a', 'an', 'in', 'of', 'to', 'with', 'for', 'on', 'at', 'by', 'is', 'and', 'as', 'it', 'that', 'this', 'from']);
+            const wordCount = {};
+
+            articles.forEach(article => {
+                const words = (article.title + ' ' + (article.description || ''))
+                    .toLowerCase()
+                    .replace(/[^\w\s]/gi, '')
+                    .split(/\s+/);
+
+                words.forEach(word => {
+                    if (word.length > 3 && !stopWords.has(word)) {
+                        wordCount[word] = (wordCount[word] || 0) + 1;
+                    }
+                });
+            });
+
+            return Object.entries(wordCount)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 15)
+                .map(([tag]) => tag);
+        }
+
+        // Render trending tags
+        function renderTrendingTags(articles) {
+            const tagsContainer = document.getElementById('tags');
+            const trendingTags = extractTrendingTags(articles);
+            
+            if (trendingTags.length === 0) {
+                tagsContainer.innerHTML = '<p class="text-gray-500">No trending tags found</p>';
+                return;
+            }
+            
+            tagsContainer.innerHTML = trendingTags.map(tag => `
+                <div class="tag" onclick="handleTagClick('${tag}')">#${tag}</div>
+            `).join('');
+        }
+
+        // Handle tag click
+        function handleTagClick(tag) {
+            document.getElementById('search-input').value = tag;
+            handleSearch(1);
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check for category parameter in URL
+            const categoryParam = getUrlParameter('category');
+            const validCategories = CATEGORIES.map(c => c.value);
+            
+            // If valid category is provided in URL, use it
+            if (categoryParam && validCategories.includes(categoryParam)) {
+                currentCategory = categoryParam;
+            }
+            
+            // Initialize categories in sidebar
+            renderCategories();
+            
+            // Load news with the determined category
+            handleCategoryChange(currentCategory);
+            
+            // Event listeners
+            document.getElementById('search-button').addEventListener('click', () => {
+                currentPage = 1;
+                handleSearch(1);
+                document.getElementById('autocomplete-list').classList.add('hidden');
+            });
+            
+            document.getElementById('search-input').addEventListener('keyup', (e) => {
+                if (e.key === 'Enter') {
+                    currentPage = 1;
+                    handleSearch(1);
+                    document.getElementById('autocomplete-list').classList.add('hidden');
+                }
+            });
+            
+            document.querySelectorAll('.category-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.category-tab').forEach(t => 
+                        t.classList.remove('active'));
+                    tab.classList.add('active');
+                    handleCategoryChange(tab.dataset.category);
+                });
+            });
+            
+            // Category filter in sidebar
+            document.getElementById('categories').addEventListener('click', (e) => {
+                const categoryBtn = e.target.closest('.category-filter');
+                if (categoryBtn) {
+                    const category = categoryBtn.dataset.category;
+                    document.querySelectorAll('.category-tab').forEach(tab => {
+                        tab.classList.toggle('active', tab.dataset.category === category);
+                    });
+                    handleCategoryChange(category);
+                }
+            });
+            
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('open');
+                    
+                    // Toggle menu icon between bars and times
+                    const icon = mobileMenuButton.querySelector('i');
+                    if (mobileMenu.classList.contains('open')) {
+                        icon.classList.replace('fa-bars', 'fa-times');
+                    } else {
+                        icon.classList.replace('fa-times', 'fa-bars');
+                    }
+                });
+            }
+
+            // Close mobile menu when a link is clicked
+            document.querySelectorAll('#mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.remove('open');
+                    mobileMenuButton.querySelector('i').classList.replace('fa-times', 'fa-bars');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
